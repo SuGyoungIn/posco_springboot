@@ -1,0 +1,190 @@
+body {
+    font-family: 'Roboto', sans-serif;
+}
+
+header{
+    width: 60vw;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-around;
+    align-items: end;
+}
+
+main{
+    width: 80vw;
+    margin: 0 auto;
+}
+
+
+a{
+    text-decoration: none;
+}
+
+h1,h2,h3,h4,p {
+    text-align: center;
+}
+
+.relative-position {
+    position: relative;
+}
+
+.right-btn{
+    position: absolute;
+    top: -5px;
+    right: 10px;
+}
+
+.border {
+    border: 2px solid #333;
+}
+
+.blue {
+    color: #05507D;
+}
+
+.light-blue {
+    color: #00A5E5;
+}
+
+.dark-grey {
+    color: #4B5151;
+}
+
+.grey {color: #BDBDBA}
+
+.side-margin {
+    margin: 10px auto;
+}
+.center-margin {
+    margin: 0 auto;
+}
+
+/*--------------------------navbar-----------------------------*/
+
+.navbar-custom {
+    background-color: #1A2226;
+    padding: 10px 10vw;
+}
+
+.navbar-custom .navbar-text{
+    color:#BDBDBA;
+}
+
+.nav-right > span {
+    margin-right: 10px;
+}
+/*--------------------------loginForm.html----------------------*/
+
+.login-box {
+    width: 40vw;
+    min-width: 320px;
+    min-height: 60vh;
+    margin: 15vh auto;
+    padding: 30px 20px;
+    background: #1A2226;
+    text-align: center;
+    box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.25);
+}
+
+.login-title{
+    margin: 7vh 0;
+}
+
+.login-title > img {
+    width: 40%;
+    object-fit: contain;
+}
+
+.login-form {
+    margin-top: 25px;
+    text-align: left;
+}
+
+.form-control {
+    background-color: #1A2226;
+    border: none;
+    border-bottom: 2px solid transparent;
+    border-image: linear-gradient(to right, #05507D, #00A5E5);
+    border-image-slice: 1;
+    font-weight: bold;
+    outline: 0;
+    padding-left: 0;
+    margin-bottom: 20px;
+    color: #ECF0F5;
+}
+
+.form-group {
+    margin-bottom: 40px;
+    outline: 0;
+}
+
+.form-control:focus {
+    border-color: inherit;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    border-bottom: 2px solid #0DB8DE;
+    outline: 0;
+    background-color: #1A2226;
+    color: #ECF0F5;
+}
+
+input:focus {
+    outline: none;
+    box-shadow: 0 0 0;
+}
+
+label {
+    margin-bottom: 0;
+}
+
+.form-control-label {
+    font-size: 14px;
+    color:#ffffff;
+    letter-spacing: 1px;
+}
+
+.btn-outline-primary {
+    border-color: #0DB8DE;
+    color: #0DB8DE;
+    border-radius: 0px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+}
+
+.btn-outline-primary:hover {
+    background-color: #0DB8DE;
+    right: 0;
+}
+
+.login-button {
+    display: flex;
+    justify-content: center;
+    text-align: right;
+    margin-bottom: 25px;
+}
+
+/*--------------------------createMission.html----------------------*/
+
+#title {
+    width: 80%;
+    border: none;
+    border-bottom: 2px solid transparent;
+    border-image: linear-gradient(to right, #05507D, #00A5E5);
+    border-image-slice: 1;
+    font-weight: bold;
+    outline: 0;
+}
+
+.bmargin{
+    margin-bottom: 20px;
+}
+
+#point{
+    border: none;
+    border-bottom: 2px solid transparent;
+    border-image: linear-gradient(to right, #05507D, #00A5E5);
+    border-image-slice: 1;
+    font-weight: bold;
+    outline: 0;
+}

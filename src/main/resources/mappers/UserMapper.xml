@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.posco_missions.model.dao.UserMapper">
+
+
+    <!-- 결과를 매핑할 DTO 클래스의 풀 패키지 경로 지정 -->
+    <resultMap id="userResultMap" type="com.example.posco_missions.model.dto.UserDto">
+        <result property="id" column="user_id"/>
+        <result property="pw" column="password"/>
+        <result property="point" column="point"/>
+    </resultMap>
+
+    <!-- SELECT 쿼리 -->
+    <select id="getAllUser" resultMap="userResultMap">
+        SELECT * FROM user
+        WHERE admin = 0;
+    </select>
+
+    <select id="getUserById" resultMap="userResultMap">
+        SELECT *
+        FROM user
+        WHERE user_id = #{id};
+    </select>
+
+
+    <!-- UPDATE 쿼리 -->
+    <update id="updateUserPoint" parameterType="com.example.posco_missions.model.dto.UserDto">
+        UPDATE user
+        SET point = #{point}
+        WHERE user_id = #{id};
+    </update>
+
+
+
+</mapper>

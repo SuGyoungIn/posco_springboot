@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.posco_missions.model.dao.MissionMapper">
+
+
+    <!-- 결과를 매핑할 DTO 클래스의 풀 패키지 경로 지정 -->
+    <resultMap id="missionResultMap" type="com.example.posco_missions.model.dto.MissionDto">
+        <result property="id" column="mission_id"/>
+        <result property="title" column="title"/>
+        <result property="startDate" column="start_date"/>
+        <result property="endDate" column="end_date"/>
+        <result property="point" column="point"/>
+        <result property="participants" column="participants"/>
+        <result property="contents" column="contents"/>
+    </resultMap>
+
+    <!-- SELECT 쿼리 -->
+    <select id="getAllMission" resultMap="missionResultMap">
+        SELECT * FROM mission;
+    </select>
+
+    <select id="getMissionById" resultMap="missionResultMap">
+        SELECT *
+        FROM mission
+        WHERE mission_id = #{id};
+    </select>
+
+    <!-- INSERT 쿼리 -->
+    <insert id="insertMission" parameterType="com.example.posco_missions.model.dto.MissionDto" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO mission (mission_id, title, start_date, end_date, point, participants,contents)
+        VALUES (#{id}, #{title}, #{startDate}, #{endDate},#{point},#{participants},#{contents});
+    </insert>
+
+    <update id="updateParticipantsMission" parameterType="com.example.posco_missions.model.dto.MissionDto">
+        UPDATE mission
+        SET participants = #{participants}
+        WHERE mission_id = #{id};
+    </update>
+
+
+
+
+</mapper>

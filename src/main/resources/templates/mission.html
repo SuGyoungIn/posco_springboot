@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>POSCO</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+  <link rel="stylesheet" type="text/css" href="/css/styles.css" th:href="@{/css/styles.css}" />
+</head>
+<body>
+
+<nav class="navbar navbar-custom">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/home">
+      <img src="https://companieslogo.com/img/orig/PKX_BIG.D-f7b9b628.png?t=1654588951" alt="Logo" width="80" class="d-inline-block align-text-top" style="object-fit: contain">
+    </a>
+    <div class="nav-right">
+      <span class="navbar-text" th:text="${user.id}+'님'"></span>
+      <span class="navbar-text" th:text="'Point: '+${user.point}+'점'"></span>
+      <button class="btn btn-outline-secondary btn-sm" onclick="logout()" >로그아웃</button>
+    </div>
+
+  </div>
+</nav>
+<div class="container" style="margin: 30px auto">
+  <div class="row">
+    <div class="col-10 center-margin">
+      <div style="display: flex; justify-content: space-between">
+      <h2 th:text="${mission.title}"></h2>
+      <p th:text="${mission.startDate}"></p>
+      <a href="/home" ><button type="button" class="btn btn-primary">리스트로 가기</button></a>
+      </div>
+      <hr>
+      <div th:utext="${mission.contents}"></div>
+      <div th:if="${user.admin == 0}" class="col-8" style="display: flex;">
+        <form id="certificationForm" action="/mission/upload" method="post" enctype="multipart/form-data">
+          <input type="file" name="file" accept="image/*">
+          <input type="hidden" name="missionId" th:value="${mission.id}">
+          <button type="button" class="btn btn-success" id="certificationBtn">인증하기</button>
+        </form>
+      </div>
+      <hr>
+    </div>
+
+    <div class="col-8 center-margin">
+      <h3 style="margin: 20px 0;">다른 참여자들의 인증샷</h3>
+      
+      <div id="certiContainer">
+          <div th:each="certification : ${certificationList}" class="border side-margin" style="padding: 10px;">
+            <h3 th:text="${certification.userId} + '님의 인증샷'"></h3>
+            <p th:text="'인증시간: ' + ${#dates.format(certification.date, 'yyyy-MM-dd HH:mm:ss')}"></p>
+            <img th:src="@{'data:image/png;base64,'+${certification.imageUrl}}" style="width: 300px; height: 240px; object-fit: contain; display: block; margin: 0 auto;">
+            <br/>
+            <button th:if="${certification.userId == user.id or user.admin == 1}" class="btn btn-primary center-margin" style="display: block;" th:onclick="'deleteCertification()'" th:text="삭제하기"></button>
+
+          </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script async src="https://cdn.jsdelivr.net/npm/es-module-shims@1/dist/es-module-shims.min.js" crossorigin="anonymous"></script>
+<script th:inline="javascript">
+
+  const logout = async () => {
+    try {
+      // 서버에 로그아웃 요청을 보냄
+      const response = await fetch('/logout', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+      if (response.ok) {
+        alert('로그아웃 되었습니다.');
+        window.location.href = '/login';
+      } else {
+        alert('로그아웃 실패');
+      }
+    } catch (error) {
+      console.error('로그아웃 오류:', error);
+    }
+  };
+
+  let missionId = [[${mission.id}]];
+  let isCertify = false;
+
+  document.addEventListener('DOMContentLoaded', async () => {
+
+    const checkCertification = async () => {
+
+      const url = `http://localhost:8080/mission/check-certification?missionId=${missionId}`
+      try {
+        const response = await fetch(url);
+        if (response.ok) {
+          const data = await response.json();
+          if (data.userId) {
+            isCertify = true;
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    }
+    checkCertification();
+
+  })
+
+  const cBtn = document.querySelector("#certificationBtn")
+  const form = document.querySelector("#certificationForm")
+  cBtn.addEventListener("click", async (e)=> {
+    e.preventDefault();
+    // FormData 객체 생성
+    const formData = new FormData(form);
+    const fileInput = document.querySelector('input[type="file"]');
+    if (fileInput.files.length === 0) return alert("인증 사진이 없습니다.")
+    if (!isCertify) {
+      try {
+        const response = await fetch("/mission/upload", {
+          method: "POST",
+          body: formData,
+        });
+        if (response.ok) {
+          alert("인증 사진을 올렸습니다.")
+          location.reload();
+
+        } else {
+          alert("인증 사진을 올리는 것을 실패했습니다.")
+        }
+      } catch (error) {
+        console.error(error);
+      }
+
+    } else {
+      try {
+        const response = await fetch("/mission/reupload", {
+          method: "PATCH",
+          body: formData
+        });
+
+        if (response.ok) {
+          alert("인증 사진을 수정했습니다.")
+          location.reload();
+
+        } else {
+          alert("인증 사진 수정에 실패했습니다.")
+        }
+      } catch (error) {
+        console.log(error)
+      }
+    }
+  })
+  const deleteCertification = async () => {
+    const url = `http://localhost:8080/mission/certification?missionId=${missionId}`
+    try {
+      const response = await fetch(url, {
+        method: "DELETE"
+      })
+      if (response.status === 200) {
+        alert("삭제 되었습니다.")
+        location.reload();
+      }
+    } catch (e) {
+      console.error(e)
+    }
+  }
+
+</script>
+</body>
+</html>
